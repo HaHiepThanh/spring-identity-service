@@ -2,7 +2,6 @@ package com.hahiepthanh.identity_service.dto.request;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import lombok.experimental.NonFinal;
 
 @Data
 @Builder
@@ -11,5 +10,4 @@ import lombok.experimental.NonFinal;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class IntrospectRequest {
     String token;
-    
 }

@@ -1,11 +1,9 @@
 package com.hahiepthanh.identity_service.dto.request;
 
-import com.hahiepthanh.identity_service.entity.Role;
-import jakarta.persistence.Id;
+import java.util.Set;
+
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-
-import java.util.Set;
 
 @Data
 @Builder

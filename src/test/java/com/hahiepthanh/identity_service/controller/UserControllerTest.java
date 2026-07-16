@@ -1,5 +1,7 @@
 package com.hahiepthanh.identity_service.controller;
 
+import java.time.LocalDate;
+
 import com.hahiepthanh.identity_service.dto.request.UserCreationRequest;
 import com.hahiepthanh.identity_service.dto.response.UserResponse;
 import com.hahiepthanh.identity_service.service.UserService;
@@ -19,8 +21,6 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import tools.jackson.databind.ObjectMapper;
 
-import java.time.LocalDate;
-
 @SpringBootTest
 @Slf4j
 @AutoConfigureMockMvc
@@ -38,8 +38,8 @@ public class UserControllerTest {
     private LocalDate dob;
 
     @BeforeEach
-    public void initData(){
-        dob = LocalDate.of(2005,06,21);
+    public void initData() {
+        dob = LocalDate.of(2005, 06, 21);
         userCreationRequest = UserCreationRequest.builder()
                 .username("thanh")
                 .firstName("Thanh")
@@ -59,64 +59,55 @@ public class UserControllerTest {
 
     @Test
     void createUser_validRequest_success() throws Exception {
-        //GIVEN
+        // GIVEN
         ObjectMapper objectMapper = new ObjectMapper();
         String content = objectMapper.writeValueAsString(userCreationRequest);
 
-        Mockito.when(userService.createUser(ArgumentMatchers.any()))
-                .thenReturn(userResponse);
+        Mockito.when(userService.createUser(ArgumentMatchers.any())).thenReturn(userResponse);
 
-        //WHEN, THEN
-        mockMvc.perform(MockMvcRequestBuilders
-                .post("/users")
+        // WHEN, THEN
+        mockMvc.perform(MockMvcRequestBuilders.post("/users")
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .content(content))
+                        .content(content))
                 .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("code")
-                        .value(1000))
-                .andExpect(MockMvcResultMatchers.jsonPath("result.id")
-                        .value("cde25fd38fae")
-        );
+                .andExpect(MockMvcResultMatchers.jsonPath("code").value(1000))
+                .andExpect(MockMvcResultMatchers.jsonPath("result.id").value("cde25fd38fae"));
     }
 
     @Test
     void createUser_usernameInvalid_fail() throws Exception {
-        //GIVEN
+        // GIVEN
         userCreationRequest.setUsername("to");
         ObjectMapper objectMapper = new ObjectMapper();
         String content = objectMapper.writeValueAsString(userCreationRequest);
 
-        //WHEN, THEN
-        mockMvc.perform(MockMvcRequestBuilders
-                        .post("/users")
+        // WHEN, THEN
+        mockMvc.perform(MockMvcRequestBuilders.post("/users")
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .content(content))
                 .andExpect(MockMvcResultMatchers.status().isBadRequest())
-                .andExpect(MockMvcResultMatchers.jsonPath("code")
-                        .value(1003))
-                .andExpect(MockMvcResultMatchers.jsonPath("message")
-                        .value("User must be at least 4 characters")
-                );
+                .andExpect(MockMvcResultMatchers.jsonPath("code").value(1003))
+                .andExpect(MockMvcResultMatchers.jsonPath("message").value("User must be at least 4 characters"));
     }
 
-//    @Test
-//    void createUser_dobInvalid_fail() throws Exception {
-//        //GIVEN
-//        dob = LocalDate.of(2025, 06, 21);
-//        userCreationRequest.setDob(dob);
-//        ObjectMapper objectMapper = new ObjectMapper();
-//        String content = objectMapper.writeValueAsString(userCreationRequest);
-//
-//        //WHEN, THEN
-//        mockMvc.perform(MockMvcRequestBuilders
-//                        .post("/users")
-//                        .contentType(MediaType.APPLICATION_JSON_VALUE)
-//                        .content(content))
-//                .andExpect(MockMvcResultMatchers.status().isBadRequest())
-//                .andExpect(MockMvcResultMatchers.jsonPath("code")
-//                        .value(1008))
-//                .andExpect(MockMvcResultMatchers.jsonPath("message")
-//                        .value("Your age must be at least 18")
-//                );
-//    }
+    //    @Test
+    //    void createUser_dobInvalid_fail() throws Exception {
+    //        //GIVEN
+    //        dob = LocalDate.of(2025, 06, 21);
+    //        userCreationRequest.setDob(dob);
+    //        ObjectMapper objectMapper = new ObjectMapper();
+    //        String content = objectMapper.writeValueAsString(userCreationRequest);
+    //
+    //        //WHEN, THEN
+    //        mockMvc.perform(MockMvcRequestBuilders
+    //                        .post("/users")
+    //                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+    //                        .content(content))
+    //                .andExpect(MockMvcResultMatchers.status().isBadRequest())
+    //                .andExpect(MockMvcResultMatchers.jsonPath("code")
+    //                        .value(1008))
+    //                .andExpect(MockMvcResultMatchers.jsonPath("message")
+    //                        .value("Your age must be at least 18")
+    //                );
+    //    }
 }

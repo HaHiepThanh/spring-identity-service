@@ -1,5 +1,7 @@
 package com.hahiepthanh.identity_service.configuration;
 
+import java.io.IOException;
+
 import com.hahiepthanh.identity_service.dto.request.ApiResponse;
 import com.hahiepthanh.identity_service.exception.ErrorCode;
 import jakarta.servlet.ServletException;
@@ -10,11 +12,10 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import tools.jackson.databind.ObjectMapper;
 
-import java.io.IOException;
-
 public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
     @Override
-    public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException)
+    public void commence(
+            HttpServletRequest request, HttpServletResponse response, AuthenticationException authException)
             throws IOException, ServletException {
         ErrorCode errorCode = ErrorCode.UNAUTHENTICATED;
 

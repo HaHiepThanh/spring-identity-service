@@ -1,5 +1,8 @@
 package com.hahiepthanh.identity_service.service;
 
+import java.util.HashSet;
+import java.util.List;
+
 import com.hahiepthanh.identity_service.dto.request.RoleRequest;
 import com.hahiepthanh.identity_service.dto.response.RoleResponse;
 import com.hahiepthanh.identity_service.mapper.RoleMapper;
@@ -11,9 +14,6 @@ import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
-import java.util.List;
-
 @Service
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
@@ -23,7 +23,7 @@ public class RoleService {
     PermissionRepository permissionRepository;
     RoleMapper roleMapper;
 
-    public RoleResponse createRole(RoleRequest request){
+    public RoleResponse createRole(RoleRequest request) {
         var role = roleMapper.toRole(request);
 
         var permissions = permissionRepository.findAllById(request.getPermissions());
@@ -33,11 +33,11 @@ public class RoleService {
         return roleMapper.toRoleResponse(role);
     }
 
-    public List<RoleResponse> getAllRole(){
+    public List<RoleResponse> getAllRole() {
         return roleRepository.findAll().stream().map(roleMapper::toRoleResponse).toList();
     }
 
-    public void deleteRole(String role){
+    public void deleteRole(String role) {
         roleRepository.deleteById(role);
     }
 }

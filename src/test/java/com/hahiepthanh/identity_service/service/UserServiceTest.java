@@ -1,5 +1,13 @@
 package com.hahiepthanh.identity_service.service;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.when;
+
+import java.time.LocalDate;
+import java.util.Optional;
+
 import com.hahiepthanh.identity_service.dto.request.UserCreationRequest;
 import com.hahiepthanh.identity_service.dto.response.UserResponse;
 import com.hahiepthanh.identity_service.entity.User;
@@ -13,13 +21,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
-import java.time.LocalDate;
-import java.util.Optional;
-
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.when;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest
 @TestPropertySource("/test.properties")
@@ -36,8 +37,8 @@ public class UserServiceTest {
     private User user;
 
     @BeforeEach
-    public void initData(){
-        dob = LocalDate.of(2005,06,21);
+    public void initData() {
+        dob = LocalDate.of(2005, 06, 21);
         userCreationRequest = UserCreationRequest.builder()
                 .username("thanh")
                 .firstName("Thanh")
@@ -63,46 +64,38 @@ public class UserServiceTest {
                 .build();
     }
 
-
     @Test
-    void createUser_validRequest_success(){
-        //GIVEN
-        when(userRepository.existsByUsername(anyString()))
-                .thenReturn(false);
+    void createUser_validRequest_success() {
+        // GIVEN
+        when(userRepository.existsByUsername(anyString())).thenReturn(false);
 
-        when(userRepository.save(any()))
-                .thenReturn(user);
+        when(userRepository.save(any())).thenReturn(user);
 
-        //WHEN
+        // WHEN
         var user = userService.createUser(userCreationRequest);
 
-        //THEN
+        // THEN
 
-        Assertions.assertThat(userResponse.getId())
-                .isEqualTo("cde25fd38fae");
+        Assertions.assertThat(userResponse.getId()).isEqualTo("cde25fd38fae");
 
-        Assertions.assertThat(userResponse.getUsername())
-                .isEqualTo("thanh");
+        Assertions.assertThat(userResponse.getUsername()).isEqualTo("thanh");
     }
 
     @Test
-    void createUser_userExisted_fail(){
-        //GIVEN
-        when(userRepository.existsByUsername(anyString()))
-                .thenReturn(true);
+    void createUser_userExisted_fail() {
+        // GIVEN
+        when(userRepository.existsByUsername(anyString())).thenReturn(true);
 
-        //WHEN
-        var exception = assertThrows(AppException.class,
-                () -> userService.createUser(userCreationRequest));
+        // WHEN
+        var exception = assertThrows(AppException.class, () -> userService.createUser(userCreationRequest));
 
-        //THEN
-        Assertions.assertThat(exception.getErrorCode().getCode())
-                .isEqualTo(1002);
+        // THEN
+        Assertions.assertThat(exception.getErrorCode().getCode()).isEqualTo(1002);
     }
 
     @Test
     @WithMockUser(username = "thanh")
-    void getMyInfo_valid_success(){
+    void getMyInfo_valid_success() {
         when(userRepository.findByUsername(anyString())).thenReturn(Optional.of(user));
 
         var response = userService.getMyInfo();
@@ -113,13 +106,12 @@ public class UserServiceTest {
 
     @Test
     @WithMockUser(username = "thanh")
-    void getMyInfo_userNotFound_fail(){
+    void getMyInfo_userNotFound_fail() {
         when(userRepository.findByUsername(anyString())).thenReturn(Optional.ofNullable(null));
 
         var exception = assertThrows(AppException.class, () -> userService.getMyInfo());
 
         Assertions.assertThat(exception.getErrorCode().getCode()).isEqualTo(1005);
         Assertions.assertThat(exception.getMessage()).isEqualTo("User not existed");
-
     }
 }
