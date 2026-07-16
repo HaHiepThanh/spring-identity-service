@@ -9,7 +9,6 @@ import com.hahiepthanh.identity_service.service.AuthenticationService;
 import com.nimbusds.jose.JOSEException;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.oauth2.jose.jws.MacAlgorithm;
 import org.springframework.security.oauth2.jwt.Jwt;
@@ -24,7 +23,6 @@ public class CustomJwtDecoder implements JwtDecoder {
     @Value("${jwt.signerKey}")
     String signetKey;
 
-    @Autowired
     AuthenticationService authenticationService;
 
     NimbusJwtDecoder nimbusJwtDecoder = null;
