@@ -1,5 +1,6 @@
 package com.hahiepthanh.identity_service.configuration;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -22,6 +23,7 @@ public class SecurityConfig {
         "/users", "/auth/token", "/auth/introspect", "/auth/logout", "/auth/refreshToken"
     };
 
+    @Autowired
     private CustomJwtDecoder customJwtDecoder;
 
     @Bean
